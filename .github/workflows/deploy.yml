@@ -21,6 +21,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run test:db
+      - run: npm run test:edge
       - name: Build frontend
         run: npm run build
         env:
@@ -33,17 +34,9 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           path: dist
-  edge-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-      - run: deno check supabase/functions/game-command/index.ts supabase/functions/admin-users/index.ts supabase/functions/auth-session/index.ts supabase/functions/engine-tick/index.ts
   deploy:
     if: github.event_name != 'pull_request'
-    needs: [verify, edge-check]
+    needs: verify
     runs-on: ubuntu-latest
     permissions:
       pages: write
