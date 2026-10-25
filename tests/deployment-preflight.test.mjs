@@ -16,6 +16,7 @@ test("rejects missing environment, secret keys, and a wrong Pages base", () => {
   assert.equal(check({}).length, 2);
   assert.equal(check({ ...valid, VITE_SUPABASE_ANON_KEY: "sb_secret_" + "a".repeat(32) }).length, 1);
   assert.equal(check({ ...valid, VITE_BASE_PATH: "/incorrect/nested/" }).length, 1);
+  assert.equal(check({ ...valid, VITE_BASE_PATH: "/other/" }).length, 1);
 });
 
 test("accepts a correctly scoped legacy anon JWT only", () => {
