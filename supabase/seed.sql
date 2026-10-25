@@ -1,0 +1,1 @@
+-- No passwords or auth accounts in seed. Create isolated scenarios through the admin panel.
