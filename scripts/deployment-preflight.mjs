@@ -20,7 +20,7 @@ export function validateDeploymentEnvironment(env) {
   if (!publicKey) {
     errors.push("VITE_SUPABASE_ANON_KEY must be a publishable key or legacy anon JWT (never a service/secret key).");
   }
-  if (!/^\/(?:[a-zA-Z0-9_-]+\/)?$/.test(base)) {
+  if (base !== "/game/" && base !== "/") {
     errors.push("VITE_BASE_PATH must be /game/ for repository Pages, or / for a custom domain.");
   }
   return errors;
