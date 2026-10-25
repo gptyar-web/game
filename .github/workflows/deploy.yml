@@ -19,6 +19,7 @@ jobs:
           node-version: "24"
           cache: npm
       - run: npm ci
+      - run: node --test tests/deployment-preflight.test.mjs
       - run: npm test
       - run: npm run test:db
       - run: npm run test:edge
@@ -30,6 +31,13 @@ jobs:
           VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/game/' }}
       - name: Verify no server secret is bundled
         run: node scripts/check-public-build.mjs
+      - name: Require connected GAME backend before publishing
+        if: github.event_name != 'pull_request'
+        run: node scripts/deployment-preflight.mjs
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH || '/game/' }}
       - uses: actions/upload-pages-artifact@v4
         if: github.event_name != 'pull_request'
         with:
